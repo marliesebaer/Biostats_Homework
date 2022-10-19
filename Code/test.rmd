@@ -5,7 +5,11 @@ date: "10/19/2022"
 output: html_document
 ---
 
+
 I'm trying to make a merge conflict. gus loves oatmeal and honestly same well kinda
+
+I'm trying to make a merge conflict. pizza pizza yum yum!
+
 
 
 
