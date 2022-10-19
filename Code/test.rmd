@@ -1,0 +1,12 @@
+---
+title: "test merge conflict"
+author: "Marliese"
+date: "10/19/2022"
+output: html_document
+---
+
+I'm trying to make a merge conflict
+
+
+
+
