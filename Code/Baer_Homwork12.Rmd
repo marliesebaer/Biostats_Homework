@@ -1,0 +1,78 @@
+---
+title: "Baer_Homwork12.Rmd"
+author: "Marliese"
+date: "10/18/2022"
+output: html_document
+---
+
+set it up!
+
+```{r}
+rm(list=ls())
+library(ggplot2)
+library(dplyr)
+library(here)
+```
+
+import dataset
+```{r}
+library(readr)
+Cover <- read.csv(here("Data","donnerville_percent_cover.csv"), stringsAsFactors=TRUE)
+View(Cover)
+```
+I don't know why this is giving me an error in the code but showing up in my environment with no problem. I am just going to keep going because it is in my environment and I can use it so hopefully this won't creat problems later.
+
+UPDATE: I fixed the problem there yay!
+
+
+Examine the dataset!
+
+using str() and glimpse(): these give similar outputs
+
+```{r}
+str(Cover)
+glimpse (Cover)
+```
+
+look at the summary stats
+
+```{r}
+summary(Cover)
+```
+
+Determine the average percent cover by cover type (bare, bryophytes, vascular plants) for Donnerville 1.
+
+Okay lets try this!
+
+```{r}
+mean.percent<-summarise(
+  group_by(Cover,Type),
+  meanpercent = mean(Percent))
+```
+
+Okay, I am having some difficulty. This code almost did what I wanted it to, but I don't think it is only giving me output for site Donerville 1. 
+
+Let me try this.
+
+
+```{r}
+mean.percent<-summarise(
+  (filter(Cover,Site=="Donnerville 1"))
+  group_by(Cover,Type),
+  meanpercent = mean(Percent))
+```
+
+Okay, so this isn't really working either. And now my text is in blue? weird.
+
+Now I will try to determine the average percent vascular plant cover across all sites. I am going to try it with piping.
+
+```{r}
+Cover %>%
+  filter(Type=="Vascular")%>%
+  mean(Percent)
+```
+
+
+
+Okay, so this is not going wicked smoothly. I have been working on this for too long and I am still having issues. I will ask Liv for help and then if we can't figure it out, I will just leave it at this because I don't know why it isn't working.
+

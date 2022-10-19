@@ -1,0 +1,181 @@
+---
+title: "Baer_HW11_GSWRCh3Ex1"
+author: "Marliese"
+date: "10/11/2022"
+output: html_document
+---
+
+Hello! Welcome to my markdown, in which I will be working through Chapter 3 (not including appendix 3A or 3B) of Getting Started with R.
+
+First I will "set things up"
+```{r}
+rm(list=ls())
+library(dplyr)
+library(ggplot2)
+library(here)
+```
+
+
+
+```{r}
+DF <- read.csv(here("Data", "compensation (1).csv"), stringsAsFactors=TRUE)
+str(DF) #structure
+```
+
+See what overall the data looks like.
+```{r}
+glimpse(DF)
+```
+
+Summary Stats!
+```{r}
+#get summary stats for DF
+summary(DF)
+```
+
+Now we move on to using dplyr! Lets start w subsetting.
+
+Select a column using select()
+```{r}
+names(DF) #shows you the name of the columns
+select(DF, Fruit) #use the fruit column
+```
+
+To select all columns except one:
+```{r}
+select(DF,-Root) #minus sign followed by a column header will exclude that column from the output
+```
+
+
+Okay, well done! Youre killing it! On to slice(). This function gives rows of data.
+```{r}
+slice(DF,2) #2 indicates it will give the second row
+```
+
+If we want the 2nd row-10th row
+```{r}
+slice(DF,2:10)
+```
+
+for discontinuous sets
+```{r}
+slice(DF,c(2,3,10))
+```
+note: it creates new row numbers and doesn't keep the rows they were originally in (in DF)
+
+
+Nicely done! Moving on to filter(). Before we actually use filter, lets see how it works. How does R interpret ">"
+```{r}
+with(DF,Fruit>80)
+```
+
+filter() uses this! It will sort the data into the categories of true or false and then show you what you want to see.
+
+```{r}
+#find rows where it is true that Fruit is >80 return
+#them as a data frame
+filter(DF,Fruit>80)
+```
+
+
+Select rows w multiple conditions
+ie.keep only rows w fruit>80 or less than 20
+```{r}
+filter(DF,Fruit>80|Fruit<20)
+```
+
+Other logical and boolean operations you can use w filter()
+
+```{r}
+#to find which rows it is true the conditions are met 
+filter(DF,Fruit==80)
+#to find which rows it is true the conditions are not met
+filter(DF,Fruit!=80)
+#to find less than or equal to
+filter(DF,Fruit<=80)
+#OR: in which rows is it true that fruit is >60 or fruit is <20? it will return all those rows
+filter(DF,Fruit>80|Fruit<20)
+#AND: both conditions must be true. this will return rows where it is true that both conditions (from 2 variables) are met
+filter(DF,Fruit>80&Root<2.3)
+```
+
+
+Okay! Now lets make sure we can actually use the subset!
+
+```{r}
+lo_hi_fruit<-filter(DF,Fruit>80|Fruit<20)
+#now look at it
+lo_hi_fruit
+```
+
+REMEMBER: to use a subset using filter(), you have to assign the values to a object aka word (as shown above).
+
+Okay, lets move on to transforming.
+
+mutate() is a dplyr function and designates a new column name and the transformation
+```{r}
+DF<-mutate(DF,logFruit=log(Fruit))
+head(DF)
+```
+
+
+Sorting (in this case in order of increasing Fruit production)
+```{r}
+arrange(DF, Fruit)
+```
+
+Using dplyr functions together
+
+```{r}
+select(filter(DF,Fruit>80),Root) #filter the data first, take the data frame from filter, and use select to get root column only
+```
+
+
+Oh boy, okay lets get into a concept that is a bit more complicated for me: piping commands!
+
+1. always start with the data frame
+```{r}
+DF %>% #work w all the DF data
+  filter(Fruit>80)%>% #filter it based on the fruit column, getting all rows where it is true that Fruit>80 and then pass this dataframe on to...
+  select(Root) #select() and return only the root column as the final data frame!
+```
+
+
+Group summary stats - summarization
+
+method 1: nested, no pipe
+```{r}
+mean.fruit<-summarise(
+  group_by(DF,Grazing),
+  meanFruit = mean(Fruit))
+```
+
+NOTE: there is no diff between the code directly above and directly below. it is just a formatting preference.
+
+```{r}
+mean.fruit<-summarise(group_by(DF,Grazing),meanFruit = mean(Fruit))
+```
+
+
+method 2: pipe, no nesting
+```{r}
+DF%>%
+  group_by(Grazing)%>%
+  summarise(meanFruit=mean(Fruit))
+```
+
+extending the summarization
+```{r}
+DF%>%
+  group_by(Grazing)%>%
+  summarise(
+    meanFruit=mean(Fruit),
+    sdFruit=sd(Fruit),
+    medFruit=median(Fruit))
+```
+
+YOU did it!! Yay, well done! Academic weapon!
+
+
+
+

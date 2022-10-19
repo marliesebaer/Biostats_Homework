@@ -1,0 +1,34 @@
+---
+title: "Baer-Homework19.Rmd"
+author: "Marliese"
+date: "10/17/2022"
+output: html_document
+---
+
+set it up!
+
+```{r}
+rm(list=ls())
+library(ggplot2)
+library(dplyr)
+library(here)
+```
+
+import dataset
+
+```{r}
+library(readr)
+Leaves <- read_csv("Code/MBaerHomework-20/data/Leaves.csv")
+View(Leaves)
+```
+
+examine data
+```{r}
+str(Leaves)
+```
+
+
+
+
+
+

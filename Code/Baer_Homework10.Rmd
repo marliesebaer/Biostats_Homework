@@ -1,0 +1,29 @@
+---
+title: "Baer_Homework10.Rmd"
+author: "Marliese"
+date: "9/23/2022"
+output: html_document
+---
+
+Hello, lets get started! First, clear R's brain.
+
+
+```{r}
+rm(list=ls())
+library(dplyr)
+library(ggplot2)
+library(here)
+```
+
+
+next, lets bring in some data using code.
+
+```{r}
+DF <- read.csv(here("Data", "Baer_squirrels.csv.csv"), stringsAsFactors=TRUE)
+str(DF) #structure
+```
+
+
+
+
+
