@@ -1,0 +1,82 @@
+---
+title: "Using dplyr to fix mistakes"
+author: "Marliese"
+date: "10/18/2022"
+output: html_document
+---
+
+Hello! In this homework I will be looking to use dplyr to fix mistakes. This should be very helpful to me based on the last homework lol. I hope it works, but even if it doesn't it will be a learning experience! Okay, lets get into it.
+
+1. First I'm going to set things up.
+
+```{r}
+rm(list=ls())
+library(ggplot2)
+library(dplyr)
+library(readr)
+library(here)
+```
+
+2. Okay now that that is taken care of, lets import the data and run a summary. Dont use stringsAsFactors=TRUE
+
+```{r}
+library(readr)
+DF <- read.csv(here("Data","drug_resistance.csv"))
+View(DF)
+```
+
+```{r}
+summary(DF)
+```
+
+Okay this time use stringsAsFactors=TRUE
+
+```{r}
+library(readr)
+DF <- read.csv(here("Data","drug_resistance.csv"), stringsAsFactors = TRUE)
+View(DF)
+```
+
+```{r}
+summary(DF)
+```
+
+These are different outputs!
+W/out stringsAsFactors=TRUE: defines the type of data (character, numerial, etc.) for treatment and tech.name
+W/ stringsAsFactors=TRUE: doesn't define the types of data
+
+NOT QUITE - BOTH DEFINE DATA TYPES. BUT WITH STRINGSASFACTORS = FALSE, CATEGORICAL VARIABLES COME IN AS CHARACTER VARIABLES, AND R CAN'T TELL YOU MUCH ABOUT THEM.
+
+3. Now use either the function unique() or levels() to examine each of the text-based columns of data. In which variables do you see errors?
+
+```{r}
+unique(DF$Treatment)
+unique(DF$tech.name)
+```
+yessss you are an academic weapon! I am so glad that worked!
+
+I LOVE THE ACADEMIC WEAPON TITLE!
+
+
+Both variables have errors. They spelled and capitalized the inputs differently, causing R to think they are different. The Treatments should only have Control, Drug_2, and Drug_3 as options. The tech names should only have Jose, Brian, Mary, and Becca as options.
+
+
+
+4. Using the techniques we discussed in class, repair the data set so that there are the appropriate number of choices for each of the character/factor variables.
+
+Okay this is going to be difficult because I wansn't in class, but I will try.
+
+
+```{r}
+
+```
+
+this doesn't make sense to me. I tried dawg, its been a long day. Ill try again tomorrow. 
+
+I THINK YOU SHOWED ME HOW TO DO THIS WITH SOME CODE THAT OLIVIA HELPED YOU WITH BUT I'M NOT SURE WHY I CAN'T SEE THAT CODE HERE?
+
+TAKE A LOOK AT THE KEY TO SEE HOW TO DO IT.
+
+
+
+
