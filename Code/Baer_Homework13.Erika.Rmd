@@ -1,0 +1,119 @@
+---
+title: "Applying more dplyr to my data"
+author: "Marliese"
+date: "10/18/2022"
+output: html_document
+---
+
+Hello! In this homework I will be looking to apply more dplyr functions and learn more about it. I hope it works, but even if it doesn't it will be a learning experience! Okay, lets get into it.
+
+1. First I'm going to set things up.
+
+```{r}
+rm(list=ls())
+library(ggplot2)
+library(dplyr)
+library(readr)
+library(here)
+```
+
+2. Okay now that that is taken care of, lets import the data.
+
+```{r}
+library(readr)
+DF <- read.csv(here("Data","day_one_data_for_homework13.csv"), stringsAsFactors=TRUE)
+View(DF)
+```
+
+All of the column names that had spaces in them were replaced by . or _ by R
+
+3. Use the names() function (hint - chapter 2) to change the column names to, in order from left to right: Name, Date, Part, Tree_num, Species, leaf_length, leaf_width, leaf_units
+
+
+```{r}
+names(DF)
+```
+
+```{r}
+mutate(DF,Tree_num=Tree..)
+```
+
+Okay, so that almost worked. Instead of replacing it though I just added a new column. Let me try again after some research.
+
+```{r}
+rename(DF,Tree_num=Tree..)
+```
+
+
+YESSSS! Literally queen. Okay do the same thing for the rest of it.
+
+
+```{r}
+rename(DF,Tree_num=Tree..)
+rename(DF,Species=Tree.species)
+rename(DF,leaf_length=Leaf.length)
+rename(DF,leaf_width=leaf.width)
+```
+
+Okay that still didn't work for some reason. Well it partially worked actually. One of the column names was re-named and the rest stayed the same. That is strange.
+
+
+```{r}
+names(DF)
+```
+
+Okay, just kidding that didn't work lol. Lets see how I can fix it.
+
+Update: upon further review I am thouroughly confused. But that is okay.
+
+```{r}
+mutate(DF,Tree_num=Tree..)
+rename(DF,Tree_num=Tree..)
+mutate(DF,Species=Tree.species)
+rename(DF,Species=Tree.species)
+mutate(DF,leaf_length=Leaf.length)
+rename(DF,leaf_length=Leaf.length)
+mutate(DF,leaf_width=leaf.width)
+rename(DF,leaf_width=leaf.width)
+```
+
+Okay, that didn't work either. Huh. I am going to move on and come back to it later.
+
+
+4. Notice that some of the leaf measurements are in inches, and some are in metric units. Write code that selects just the rows of data that are in English units (inches) and that saves them to a new data frame called "English"
+
+```{r}
+slice(DF,leaf_units==inches)
+```
+
+literally why lord why. Ok I try again. I am going to manually check which ones have inches and just use c()
+
+```{r}
+slice(DF,c(1:5))
+```
+
+
+Make it a new data frame
+
+```{r}
+English<-data.frame(slice(DF,c(1:5)))
+```
+
+Okay, yay I'm glad that worked. Go me. Coninuing on now...
+
+5. Now notice that the dates have been entered in several formats, and that for one person, the years associated with the dates are incorrect. Write code that collects all of the data for which the dates have been formatted in the same way together into a single data frame and call it "Uniform_dates"
+
+
+```{r}
+
+```
+
+
+this is a struggle. 
+
+LET'S MAKE SURE YOU CAN DO THIS. BE SURE TO TAKE A LOOK AT THE KEY. ALSO, I'M GOING TO MAKE A GENERAL CLASS SUGGESTION WHICH IS THAT YOU PUT A FINAL VERSION OF YOUR FILE THAT HAS THE CODE THAT WORKS AND ONLY THAT CODE SO THAT YOU HAVE A RECORD OF HOW THINGS CAN BE DONE.
+
+
+
+
+
