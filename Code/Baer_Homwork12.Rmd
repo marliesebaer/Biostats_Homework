@@ -64,15 +64,27 @@ mean.percent<-summarise(
 
 Okay, so this isn't really working either. And now my text is in blue? weird.
 
+Okay, I went to Erika for help and this is what she suggested. PIPING!
+
+Okay lets try to use piping="and then"=%>%
+```{r}
+newdata<-Cover %>%
+  filter(Site=="Donnerville 1") %>%
+  group_by(Type)%>%
+  summarise(meanpercent = mean(Percent))
+```
+
+Incredible!!!
+
 Now I will try to determine the average percent vascular plant cover across all sites. I am going to try it with piping.
 
 ```{r}
 Cover %>%
   filter(Type=="Vascular")%>%
-  mean(Percent)
+  group_by(Site)%>%
+  summarise(meanpercent = mean(Percent))
 ```
 
+Okay, so after quite the trial and error I think I did it!! Yes, academic weapon! That is awesome, go eat a peice of chocolate as a reward.
 
-
-Okay, so this is not going wicked smoothly. I have been working on this for too long and I am still having issues. I will ask Liv for help and then if we can't figure it out, I will just leave it at this because I don't know why it isn't working.
 

@@ -52,6 +52,7 @@ Okay, well done! Youre killing it! On to slice(). This function gives rows of da
 slice(DF,2) #2 indicates it will give the second row
 ```
 
+
 If we want the 2nd row-10th row
 ```{r}
 slice(DF,2:10)
@@ -93,9 +94,9 @@ filter(DF,Fruit==80)
 filter(DF,Fruit!=80)
 #to find less than or equal to
 filter(DF,Fruit<=80)
-#OR: in which rows is it true that fruit is >60 or fruit is <20? it will return all those rows
+#OR: in which rows is it true that fruit is >60 or fruit is <20? it will return all those rows. | = or
 filter(DF,Fruit>80|Fruit<20)
-#AND: both conditions must be true. this will return rows where it is true that both conditions (from 2 variables) are met
+#AND: both conditions must be true. this will return rows where it is true that both conditions (from 2 variables) are met. & = and
 filter(DF,Fruit>80&Root<2.3)
 ```
 

@@ -65,10 +65,32 @@ Okay this is going to be difficult because I wansn't in class, but I will try.
 
 
 ```{r}
+no<-which(DF$Treatment=="cantrol"|DF$Treatment=="Control")
+
+DF$Treatment[no]<-"control"
+
+
+wrong<-which(DF$Treatment=="drug x 2"|DF$Treatment=="drug2")
+
+DF$Treatment[wrong]<-"Drugx2"
+
+
+ew<-which(DF$Treatment=="drug x 3"|DF$Treatment=="drug3")
+
+DF$Treatment[ew]<-"Drug x 3"
+
+
+thenerve<-which(DF$tech.name=="brain"|DF$tech.name=="brian")
+
+DF$tech.name[thenerve]<-"Brian"
+
+
+howdareyou<-which(DF$tech.name=="becca")
+DF$tech.name[howdareyou]<-"Becca"
 
 ```
 
-this doesn't make sense to me. I tried dawg, its been a long day. Ill try again tomorrow. 
+thank you so much liv literally saving my life here
 
 
 

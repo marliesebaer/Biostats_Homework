@@ -57,11 +57,6 @@ rename(DF,leaf_width=leaf.width)
 
 Okay that still didn't work for some reason. Well it partially worked actually. One of the column names was re-named and the rest stayed the same. That is strange.
 
-
-```{r}
-names(DF)
-```
-
 Okay, just kidding that didn't work lol. Lets see how I can fix it.
 
 Update: upon further review I am thouroughly confused. But that is okay.
@@ -79,37 +74,55 @@ rename(DF,leaf_width=leaf.width)
 
 Okay, that didn't work either. Huh. I am going to move on and come back to it later.
 
+Okay, so I asked erika for help and this is what she suggested.
+
+
+try:
+```{r}
+names(DF)<-c("Name", "Date", "Part", "Tree_num", "Species", "leaf_length", "leaf_width", "leaf_units")
+```
+
+Okay, now lets see if that worked.
+
+```{r}
+names(DF)
+```
+
+omg amazing.
+
 
 4. Notice that some of the leaf measurements are in inches, and some are in metric units. Write code that selects just the rows of data that are in English units (inches) and that saves them to a new data frame called "English"
 
-```{r}
-slice(DF,leaf_units==inches)
-```
-
-literally why lord why. Ok I try again. I am going to manually check which ones have inches and just use c()
+thank god for liv.
 
 ```{r}
-slice(DF,c(1:5))
+English<-DF%>%
+  filter(leaf_units=="inches")
 ```
 
 
-Make it a new data frame
-
-```{r}
-English<-data.frame(slice(DF,c(1:5)))
-```
 
 Okay, yay I'm glad that worked. Go me. Coninuing on now...
+
 
 5. Now notice that the dates have been entered in several formats, and that for one person, the years associated with the dates are incorrect. Write code that collects all of the data for which the dates have been formatted in the same way together into a single data frame and call it "Uniform_dates"
 
 
 ```{r}
-
+Uniform_dates<-DF%>%
+  filter(Date=="8/24/22"|Date=="8/24/2022")
 ```
 
 
-this is a struggle. 
+literally yay
+
+
+Okay so to exclude values use "is not equal to" or  "!="
+
+```{r}
+Take2<-DF%>%
+  filter(Date!="Aug 24th")
+```
 
 
 
