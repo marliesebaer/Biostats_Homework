@@ -1,0 +1,106 @@
+---
+title: "Baer_Homework25"
+author: "Marliese"
+date: "10/31/2022"
+output: html_document
+---
+
+```{r}
+rm(list=ls())
+library(ggplot2)
+library(dplyr)
+library(readr)
+library(here)
+library(ggfortify)
+```
+
+```{r}
+plant_gr<-read.csv(here("Data","plant.growth.rate.csv"), stringsAsFactors = TRUE)
+glimpse(plant_gr)
+```
+
+```{r}
+daphnia<-read.csv(here("Data","Daphniagrowth.csv"), stringsAsFactors = TRUE)
+glimpse(daphnia)
+```
+
+
+LINEAR MOD
+
+```{r}
+ggplot(plant_gr,aes(x=soil.moisture.content,y=plant.growth.rate))+
+  geom_point()+
+  ylab("plant Growth Rate (mm/week)")+
+  theme_bw()
+```
+
+
+```{r}
+model_pgr<-lm(plant.growth.rate~soil.moisture.content,data=plant_gr)
+```
+
+
+```{r}
+autoplot(model_pgr,smooth.colour=NA)
+```
+
+```{r}
+anova(model_pgr)
+```
+
+```{r}
+summary(model_pgr)
+```
+
+
+```{r}
+ggplot(plant_gr,aes(x=soil.moisture.content,y=plant.growth.rate))+
+  geom_point()+
+  geom_smooth(method='lm')+
+  ylab("plant Growth Rate (mm/week)")+
+  theme_bw()
+```
+
+
+
+ANOVA: one way
+
+```{r}
+ggplot(daphnia,aes(x=parasite,y=growth.rate))+
+  geom_boxplot()+
+  theme_bw()+
+  coord_flip()
+```
+
+
+```{r}
+mod_grow<-lm(growth.rate~parasite,data=daphnia)
+```
+
+
+```{r}
+autoplot(mod_grow,smooth.colour=NA)
+```
+
+
+```{r}
+anova(mod_grow)
+summary(mod_grow)
+```
+
+
+```{r}
+sumDat<-daphnia%>%
+  group_by(parasite)%>%
+  summarise(meanGR=mean(growth.rate))
+```
+
+
+
+
+
+
+
+
+
+
