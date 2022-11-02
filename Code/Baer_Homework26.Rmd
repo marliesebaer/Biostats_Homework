@@ -1,0 +1,137 @@
+---
+title: "Baer_Homework26"
+author: "Marliese"
+date: "11/2/2022"
+output: html_document
+---
+
+
+lets set things up
+
+```{r}
+rm(list=ls())
+library(tidyverse)
+#library(tidyverse) = library(ggplot2) + library(dplyr) + some other stuff too
+library(readr)
+library(here)
+library(ggfortify)
+```
+
+pull in the data
+
+```{r}
+DF<-read.csv(here("Data","soil_reduced-1.csv"),stringsAsFactors = TRUE)
+```
+
+
+Before we begin any analysis, we need to check our data for any errors/outliers.
+
+
+a. forest names
+
+```{r}
+levels(DF$Forest)
+```
+
+Okay awesome, don't have to fix any forest names.
+
+b. lets check soil organic matter and soil calcium
+
+start w histogram
+```{r}
+ggplot(DF,aes(x=SOM_percent))+
+  geom_histogram()
+```
+
+now check soil calcium
+```{r}
+ggplot(DF,aes(x=Ca_ppm))+
+  geom_histogram()
+```
+
+
+lets also run a summary of all variables
+```{r}
+summary(DF)
+```
+
+look at min mean max. look for anything wierd (ie. outliers, NA values)
+
+
+
+1. Is there a relationship between Soil organic matter (SOM, %) and soil calcium (Ca_ppm)?
+
+
+both continuous variables (quant, numeric, not integer)
+
+indicate a scatterplot
+
+```{r}
+ggplot(DF,aes(x=SOM_percent, y=Ca_ppm, color=Forest))+
+  geom_point()+
+  theme_bw()
+```
+
+if strong linear = high R^2
+
+the influence of a single point on the relationship is called leverage. Ouliers often have high leverage.
+
+From looking at the data, it apprears there may be a weak pos linear realtionship between SOM and Ca.
+
+eyeballing: 
+-slope = 1000/53=18 ish
+- y-int = -5? or 0?
+
+What statistical model fits these data?
+
+simple linear regression bc both response and explanatory are continuous.
+
+Okay, so lets construct the model
+
+```{r}
+mod1<-lm(Ca_ppm~SOM_percent,data=DF)
+summary(mod1)
+```
+
+Check assumptions of mod1
+
+```{r}
+autoplot(mod1)
+```
+
+Assumptions of linear regression (including ANOVA)
+
+1. data are normally distributed (aka fit noraml dist)
+-look at QQ plot to see if data are normally dist (how close the dots fit the dotted line, want as close as possible)
+2. variance of resids is equal accross spread of data (how close your model is to your data (how far data point is from model line))
+-resid vs fits plot
+
+
+Based on my observtions of the autoplot results, I am modestly comfortable that my data meet the lm assumptions.
+
+note= this is what erika said. i dont know if i agree with her. but moving on.
+
+now look at model outcome
+
+```{r}
+anova(mod1)
+```
+
+not stat sig relationship between variables bc pval is greater than 0.5, accept null: there is no sig relationship between variables. Ho=Ha : null
+
+
+```{r}
+summary(mod1)
+```
+
+only 5% of variance in calcium can be explained by SOM
+
+
+
+
+2. Does the abundance of worms differ between Donnerville and the Kip Tract?
+
+3. Does the abundance of soil Magnesium (Mg_ppm) differ between Peavine and South Hammond?
+
+4. Does the abundance of zinc (Zn_ppm) differ among forests?
+
