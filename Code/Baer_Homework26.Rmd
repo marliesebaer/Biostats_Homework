@@ -131,7 +131,107 @@ only 5% of variance in calcium can be explained by SOM
 
 2. Does the abundance of worms differ between Donnerville and the Kip Tract?
 
+
+a.First lets check worms
+
+Histogram
+```{r}
+ggplot(DF,aes(x=Worms))+
+  geom_histogram()
+```
+Looks like there is an outlier over beyond 20.
+
+
+The other variable is the Forest. Thw forest is a categorical nominal variable and the worm abundance is a quanatitative dicrete variable.
+
+This will be a Chi squared contingency test
+
+```{r}
+ggplot(DF,aes(x=Forest,y=Worms))+geom_bar(stat='identity',position='dodge')+scale_fill_manual(values=c(black="black",red="red"))
+```
+
+
+```{r}
+DF2<-DF%>%
+  filter(Forest=="DONNERVILLE"|Forest=="KIP TRACT")%>%
+  group_by(Forest)%>%
+  summarise(Worms = sum(Worms))
+```
+
+
+```{r}
+ggplot(DF2,aes(x=Forest,y=Worms))+geom_bar(stat='identity',position='dodge')+scale_fill_manual(values=c(black="black",red="red"))
+```
+
+
+
+```{r}
+DF2.mat<-xtabs(Worms~Forest,data=DF2)
+DF2.mat
+```
+
+
+```{r}
+DF2.chi<-chisq.test(DF2.mat)
+names(DF2.chi)
+DF2.chi$expected
+DF2.chi
+```
+pval=2.2e-16<0.5
+pval=significant
+
+
+
 3. Does the abundance of soil Magnesium (Mg_ppm) differ between Peavine and South Hammond?
 
+```{r}
+DF3<-DF%>%
+  filter(Forest=="PEAVINE"|Forest=="SOUTH HAMMOND")%>%
+  group_by(Forest)%>%
+  summarise(Mg_ppm= sum(Mg_ppm))
+```
+
+
+
+```{r}
+ggplot(DF3,aes(x=Mg_ppm))+geom_histogram(binwidth=10)+facet_wrap(~Forest,ncol=1)+theme_bw()
+```
+
+
+2 sample t test
+
+```{r}
+t.test(Mg_ppm~Forest,data=DF3)
+```
+
+Okay, well this didn't work for some reason and I have spent a lot of time trying to get it to work so I will come back to it.
+
+
 4. Does the abundance of zinc (Zn_ppm) differ among forests?
+
+
+ANOVA!!! yay
+
+```{r}
+ggplot(DF,aes(x=Forest,y=Zn_ppm))+
+  geom_boxplot()+
+  theme_bw()+
+  coord_flip()
+```
+
+```{r}
+mod_zinc<-lm(~Zn_ppm~Forest,data=DF)
+```
+
+
+```{r}
+autoplot(mod_zinc,smooth.colour=NA)
+```
+
+```{r}
+anova(mod_zinc)
+summary(mod_zinc)
+```
+
+
 
