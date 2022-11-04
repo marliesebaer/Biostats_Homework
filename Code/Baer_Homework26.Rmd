@@ -159,11 +159,21 @@ DF2<-DF%>%
 ```
 
 
+to re-level and make the dataframe only have the 2 that we want to look at
 ```{r}
-ggplot(DF2,aes(x=Forest,y=Worms))+geom_bar(stat='identity',position='dodge')+scale_fill_manual(values=c(black="black",red="red"))
+DF2$Forest<-factor(DF2$Forest)
 ```
 
 
+```{r}
+ggplot(DF2,aes(x=Forest,y=Worms))+
+  geom_bar(stat='identity',position='dodge')+
+  scale_fill_manual(values=c(black="black",red="red"))
+```
+
+categorical predictor and count response = chi sqaured!
+
+make a matrix
 
 ```{r}
 DF2.mat<-xtabs(Worms~Forest,data=DF2)
@@ -177,8 +187,13 @@ names(DF2.chi)
 DF2.chi$expected
 DF2.chi
 ```
+
+null=there is no association between worm count and forest
+
 pval=2.2e-16<0.5
 pval=significant
+
+reject null hypothesis
 
 
 
@@ -187,8 +202,12 @@ pval=significant
 ```{r}
 DF3<-DF%>%
   filter(Forest=="PEAVINE"|Forest=="SOUTH HAMMOND")%>%
-  group_by(Forest)%>%
-  summarise(Mg_ppm= sum(Mg_ppm))
+  group_by(Forest)
+```
+
+
+```{r}
+DF3$Forest<-factor(DF3$Forest)
 ```
 
 
@@ -198,13 +217,22 @@ ggplot(DF3,aes(x=Mg_ppm))+geom_histogram(binwidth=10)+facet_wrap(~Forest,ncol=1)
 ```
 
 
-2 sample t test
+```{r}
+DF3$Mg_ppm
+```
+
+
+
+2 sample t test bc response is continuous and explanatory is catagorical w 2 categories 
 
 ```{r}
 t.test(Mg_ppm~Forest,data=DF3)
 ```
 
-Okay, well this didn't work for some reason and I have spent a lot of time trying to get it to work so I will come back to it.
+null=there is not a difference between the two forest sites
+
+pval=0.2222<0.5 **what?? look at stats and clarify
+not significant p val <- fail to reject null
 
 
 4. Does the abundance of zinc (Zn_ppm) differ among forests?
