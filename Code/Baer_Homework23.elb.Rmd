@@ -1,0 +1,49 @@
+---
+title: "Baer-Homework23"
+author: "Marliese"
+date: "10/24/2022"
+output: html_document
+---
+
+Lets set it up
+
+```{r}
+rm(list=ls())
+library(ggplot2)
+library(here)
+library(readr)
+library(dplyr)
+```
+
+
+Okay awesome, now lets bring in some data
+
+```{r}
+Soil<-read.csv(here("Data", "soil_data.csv"), stringsAsFactors = TRUE)
+```
+
+open the dataset and see what we are working with
+
+```{r}
+View(Soil)
+```
+
+
+Okay now lets make a plot looking at SOM_percent
+
+just by forest, so name the sites just DeGrasse and just Donnerville (not sites within those)
+
+```{r}
+Soil%>%
+  filter(Field.Name)%>%
+  mutate(Forest_Name<-)
+
+```
+
+
+
+```{r}
+geom_point(Feild.Name, SOM_percent, )
+```
+You didn't finish this homework by a long shot. There is a lot of code missing. Be sure to see the key if you need help understanding it, or see me.
+
