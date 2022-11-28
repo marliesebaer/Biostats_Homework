@@ -1,0 +1,74 @@
+---
+title: "Baer_Homework24"
+author: "Marliese"
+date: "10/28/2022"
+output: html_document
+---
+I CAN SEE YOU HAVE ALL OF THE CODE, BUT NONE OF THE THINKING ABOUT WHY YOU DID THE CODE - YOU SHOULD BE INCLUDING THAT TOO SO I CAN TELL YOU ACTUALLY THOUGHT ABOUT THE MATERIAL.
+
+```{r}
+rm(list=ls())
+library(ggplot2)
+library(dplyr)
+library(readr)
+library(here)
+```
+
+
+
+```{r}
+lady<-read.csv(here("Data","ladybirds.csv"), stringsAsFactors = TRUE)
+glimpse(lady)
+```
+
+
+```{r}
+totals<-lady%>%
+  group_by(Habitat,colour)%>%
+  summarise(total.number = sum(number))
+```
+
+```{r}
+ggplot(totals,aes(x=Habitat,y=total.number,fill=colour))+geom_bar(stat='identity',position='dodge')+scale_fill_manual(values=c(black="black",red="red"))
+```
+
+
+```{r}
+lady.mat<-xtabs(number~Habitat+colour,data=lady)
+lady.mat
+```
+
+```{r}
+lady.chi<-chisq.test(lady.mat)
+names(lady.chi)
+lady.chi$expected
+lady.chi
+```
+
+
+```{r}
+ozone<-read.csv(here("Data","ozone.csv"), stringsAsFactors = TRUE)
+glimpse(ozone)
+```
+
+
+```{r}
+ggplot(ozone,aes(x=Ozone))+geom_histogram(binwidth=10)+facet_wrap(~Garden.location,ncol=1)+theme_bw()
+```
+
+mean and SE of ozone levels in each location
+```{r}
+
+```
+
+
+```{r}
+t.test(Ozone~Garden.location,data=ozone)
+```
+
+
+```{r}
+var.test(Ozone~Garden.location,data=ozone)
+```
+
+All done!
