@@ -1,0 +1,265 @@
+---
+title: "Baer_Homework26"
+author: "Marliese"
+date: "11/2/2022"
+output: html_document
+---
+
+
+lets set things up
+
+```{r}
+rm(list=ls())
+library(tidyverse)
+#library(tidyverse) = library(ggplot2) + library(dplyr) + some other stuff too
+library(readr)
+library(here)
+library(ggfortify)
+```
+
+pull in the data
+
+```{r}
+DF<-read.csv(here("Data","soil_reduced-1.csv"),stringsAsFactors = TRUE)
+```
+
+
+Before we begin any analysis, we need to check our data for any errors/outliers.
+
+
+a. forest names
+
+```{r}
+levels(DF$Forest)
+```
+
+Okay awesome, don't have to fix any forest names.
+
+b. lets check soil organic matter and soil calcium
+
+start w histogram
+```{r}
+ggplot(DF,aes(x=SOM_percent))+
+  geom_histogram()
+```
+
+now check soil calcium
+```{r}
+ggplot(DF,aes(x=Ca_ppm))+
+  geom_histogram()
+```
+
+
+lets also run a summary of all variables
+```{r}
+summary(DF)
+```
+
+look at min mean max. look for anything wierd (ie. outliers, NA values)
+
+
+
+1. Is there a relationship between Soil organic matter (SOM, %) and soil calcium (Ca_ppm)?
+
+
+both continuous variables (quant, numeric, not integer)
+
+indicate a scatterplot
+
+```{r}
+ggplot(DF,aes(x=SOM_percent, y=Ca_ppm, color=Forest))+
+  geom_point()+
+  theme_bw()
+```
+
+if strong linear = high R^2
+
+the influence of a single point on the relationship is called leverage. Ouliers often have high leverage.
+
+From looking at the data, it apprears there may be a weak pos linear realtionship between SOM and Ca.
+
+eyeballing: 
+-slope = 1000/53=18 ish
+- y-int = -5? or 0?
+
+What statistical model fits these data?
+
+simple linear regression bc both response and explanatory are continuous.
+
+Okay, so lets construct the model
+
+```{r}
+mod1<-lm(Ca_ppm~SOM_percent,data=DF)
+summary(mod1)
+```
+
+Check assumptions of mod1
+
+```{r}
+autoplot(mod1)
+```
+
+Assumptions of linear regression (including ANOVA)
+
+1. data are normally distributed (aka fit noraml dist)
+-look at QQ plot to see if data are normally dist (how close the dots fit the dotted line, want as close as possible)
+2. variance of resids is equal accross spread of data (how close your model is to your data (how far data point is from model line))
+-resid vs fits plot
+
+
+Based on my observtions of the autoplot results, I am modestly comfortable that my data meet the lm assumptions.
+
+note= this is what erika said. i dont know if i agree with her. but moving on.
+
+now look at model outcome
+
+```{r}
+anova(mod1)
+```
+
+not stat sig relationship between variables bc pval is greater than 0.5, accept null: there is no sig relationship between variables. Ho=Ha : null
+
+
+```{r}
+summary(mod1)
+```
+
+only 5% of variance in calcium can be explained by SOM
+
+
+
+
+2. Does the abundance of worms differ between Donnerville and the Kip Tract?
+
+
+a.First lets check worms
+
+Histogram
+```{r}
+ggplot(DF,aes(x=Worms))+
+  geom_histogram()
+```
+Looks like there is an outlier over beyond 20.
+
+
+The other variable is the Forest. Thw forest is a categorical nominal variable and the worm abundance is a quanatitative dicrete variable.
+
+This will be a Chi squared contingency test
+
+```{r}
+ggplot(DF,aes(x=Forest,y=Worms))+geom_bar(stat='identity',position='dodge')+scale_fill_manual(values=c(black="black",red="red"))
+```
+
+
+```{r}
+DF2<-DF%>%
+  filter(Forest=="DONNERVILLE"|Forest=="KIP TRACT")%>%
+  group_by(Forest)%>%
+  summarise(Worms = sum(Worms))
+```
+
+
+to re-level and make the dataframe only have the 2 that we want to look at
+```{r}
+DF2$Forest<-factor(DF2$Forest)
+```
+
+
+```{r}
+ggplot(DF2,aes(x=Forest,y=Worms))+
+  geom_bar(stat='identity',position='dodge')+
+  scale_fill_manual(values=c(black="black",red="red"))
+```
+
+categorical predictor and count response = chi sqaured!
+
+make a matrix
+
+```{r}
+DF2.mat<-xtabs(Worms~Forest,data=DF2)
+DF2.mat
+```
+
+
+```{r}
+DF2.chi<-chisq.test(DF2.mat)
+names(DF2.chi)
+DF2.chi$expected
+DF2.chi
+```
+
+null=there is no association between worm count and forest
+
+pval=2.2e-16<0.5
+pval=significant
+
+reject null hypothesis
+
+
+
+3. Does the abundance of soil Magnesium (Mg_ppm) differ between Peavine and South Hammond?
+
+```{r}
+DF3<-DF%>%
+  filter(Forest=="PEAVINE"|Forest=="SOUTH HAMMOND")%>%
+  group_by(Forest)
+```
+
+
+```{r}
+DF3$Forest<-factor(DF3$Forest)
+```
+
+
+
+```{r}
+ggplot(DF3,aes(x=Mg_ppm))+geom_histogram(binwidth=10)+facet_wrap(~Forest,ncol=1)+theme_bw()
+```
+
+
+```{r}
+DF3$Mg_ppm
+```
+
+
+
+2 sample t test bc response is continuous and explanatory is catagorical w 2 categories 
+
+```{r}
+t.test(Mg_ppm~Forest,data=DF3)
+```
+
+null=there is not a difference between the two forest sites
+
+pval=0.2222<0.5 **what?? look at stats and clarify
+not significant p val <- fail to reject null
+
+
+4. Does the abundance of zinc (Zn_ppm) differ among forests?
+
+
+ANOVA!!! yay
+
+```{r}
+ggplot(DF,aes(x=Forest,y=Zn_ppm))+
+  geom_boxplot()+
+  theme_bw()+
+  coord_flip()
+```
+
+```{r}
+mod_zinc<-lm(~Zn_ppm~Forest,data=DF)
+```
+
+
+```{r}
+autoplot(mod_zinc,smooth.colour=NA)
+```
+
+```{r}
+anova(mod_zinc)
+summary(mod_zinc)
+```
+
+YOUR CHOICES FOR STATS ARE CORRECT. YOU DIDN'T PROVIDE ANY INTERPRETATION OF YOUR ANOVA, HOWEVER. WHAT DID IT SHOW? WHY DID YOU USE AUTOPLOT (YOU WERE CORRECT TO DO SO, BUT WHAT IS IT TELLING YOU?) 
+
