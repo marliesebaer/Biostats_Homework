@@ -1,0 +1,36 @@
+---
+title: "Baer-Homework19.Rmd"
+author: "Marliese"
+date: "10/17/2022"
+output: html_document
+---
+
+set it up!
+
+```{r}
+rm(list=ls())
+library(ggplot2)
+library(dplyr)
+library(here)
+```
+
+import dataset
+
+```{r}
+library(readr)
+Leaves <- read_csv("Code/MBaerHomework-20/data/Leaves.csv")
+View(Leaves)
+```
+YOU NEED TO STORE THE DATA IN THE DATA FOLDER, NOT IN THE CODE FOLDER, AND SHOULD BE USING THE HERE PACKAGE TO IMPORT YOUR DATASETS. OTHERWISE, THE ERROR INDICATING THAT THE DATA SET DOES NOT EXIST OCCURS. I CAN'T RUN THE REST OF THE CODE BECAUSE I DON'T HAVE  YOUR DATA. MAKE SURE THAT THIS ISSUE DOES NOT OCCUR WHEN  YOU SUBMIT YOUR PROBLEM SET 2.
+
+
+examine data
+```{r}
+str(Leaves)
+```
+
+
+
+
+
+
